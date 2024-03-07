@@ -32,19 +32,21 @@ module.exports = {
 
 				let video, content, attachment;
 				if (url.includes('youtu.be') || url.includes('youtube.com')) {
+					if (url.includes("shorts"))
+						return message.channel.send({ content: "Impossible de republier des shorts YouTube." });
 					video = await ytdown(url);
-					content = video.data.video;
+					content = video?.data?.video;
 				}
 				else if (url.includes('tiktok.com')) {
 					video = await tikdown(url);
-					content = video.data.video;
+					content = video?.data?.video;
 				} else if (url.includes('instagram.com')) {
 					video = await ndown(url);
-					content = video.data[0].url;
+					content = video?.data?.[0]?.url;
 					attachment = new AttachmentBuilder().setFile(video.data[0].url).setName('video.mp4');
 				} else if (url.includes('x.com') || url.includes('twitter.com')) {
 					video = await twitterdown(url.replace('x.com', 'twitter.com'));
-					content = video.data.HD;
+					content = video?.data?.HD;
 				}
 				if (!video || !content)
 					return message.channel.send({ content: "Impossible de trouver ou publier la vidéo." });
