@@ -33,7 +33,10 @@ module.exports = {
 				let video, content, attachment;
 				if (url.includes('youtu.be') || url.includes('youtube.com')) {
 					if (url.includes("shorts"))
+					{
+						loadingMessage.delete();
 						return message.channel.send({ content: "Impossible de republier des shorts YouTube." });
+					}
 					video = await ytdown(url);
 					content = video?.data?.video;
 				}
