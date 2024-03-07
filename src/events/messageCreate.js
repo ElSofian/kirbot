@@ -1,4 +1,4 @@
-const { ndown, tikdown, twitterdown } = require("nayan-media-downloader")
+const { ndown, tikdown, twitterdown, ytdown } = require("nayan-media-downloader");
 const { AttachmentBuilder } = require('discord.js');
 
 module.exports = {
@@ -12,12 +12,16 @@ module.exports = {
 		else
 			return;
 		
-		if (url.includes('tiktok.com') || url.includes('x.com') || url.includes('twitter.com') || url.includes('instagram.com')) {
+		if (url.includes("youtu.be") || url.includes("youtube.com") || url.includes('tiktok.com') || url.includes('x.com') || url.includes('twitter.com') || url.includes('instagram.com')) {
 			try {
 				const loadingMessage = await message.channel.send({ content: "Chargement..." });
 
 				let video, content, attachment;
-				if (url.includes('tiktok.com')) {
+				if (url.includes('youtu.be') || url.includes('youtube.com')) {
+					video = await ytdown(url);
+					content = video.data.video;
+				}
+				else if (url.includes('tiktok.com')) {
 					video = await tikdown(url);
 					content = video.data.video;
 				} else if (url.includes('instagram.com')) {
