@@ -4,7 +4,13 @@ const { AttachmentBuilder } = require('discord.js');
 module.exports = {
     name: 'messageCreate',
     run: async (client, message) => {
-        const url = message.content;
+        let url = '';
+		const match = message.content.match(/\bhttps?:\/\/\S+/);
+		
+		if (match)
+			url = match[0];
+		else
+			return;
 		
 		if (url.includes('tiktok.com') || url.includes('x.com') || url.includes('twitter.com') || url.includes('instagram.com')) {
 			try {
@@ -28,6 +34,8 @@ module.exports = {
 				message.channel.send({ content: `Tiens la [video](${content}) bg`, files: attachment ? [attachment] : [] }).catch(e => {
 					if (e.code == 40005)
 						message.channel.send({ content: "La video est trop lourde pour etre envoyee." });
+					else
+						message.channel.send({ content: error.message });
 				})
 			} catch (error) {
 				console.error(error);
