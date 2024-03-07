@@ -22,7 +22,6 @@
     "axios": "^1.6.7",
     "better-sqlite3": "^9.4.3",
     "chalk": "^4.1.2",
-    "cheerio": "^1.0.0-rc.12",
     "dayjs": "^1.11.10",
     "discord.js": "^14.14.1",
     "dotenv": "^16.4.5",
@@ -31,7 +30,6 @@
     "leo-profanity": "^1.7.0",
     "mysql2": "^3.9.2",
     "nayan-media-downloader": "^2.0.7",
-    "puppeteer": "^22.4.0",
     "quick.db": "^9.1.7"
   }
 }
