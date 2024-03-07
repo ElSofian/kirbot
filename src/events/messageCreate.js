@@ -1,9 +1,23 @@
-const { ndown, tikdown, twitterdown, ytdown } = require("nayan-media-downloader");
 const { AttachmentBuilder } = require('discord.js');
+const { ndown, tikdown, twitterdown, ytdown } = require("nayan-media-downloader");
+const leoProfanity = require('leo-profanity');
+const frenchBadwordsList = require('french-badwords-list');
 
 module.exports = {
     name: 'messageCreate',
     run: async (client, message) => {
+
+		// Halal system
+
+		leoProfanity.clearList();
+		leoProfanity.add(frenchBadwordsList.array);
+		if (leoProfanity.check(message.content)) {
+			message.delete();
+			message.channel.send({ content: "Pas de gros mots ! C'est un serveur musulman ici !" });
+		}
+
+		// Link to video system
+
         let url = '';
 		const match = message.content.match(/\bhttps?:\/\/\S+/);
 		
