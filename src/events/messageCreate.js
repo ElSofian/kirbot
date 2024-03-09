@@ -7,10 +7,16 @@ module.exports = {
     name: 'messageCreate',
     run: async (client, message) => {
 
+		if (message.author.bot) return;
+		if (!message.guild) return;
+		
 		// Halal system
-
+		
+		if (message.content.startsWith("..say")) { message.delete(); return message.channel.send({ content: message.content.slice(5) }); }
 		leoProfanity.clearList();
 		leoProfanity.add(frenchBadwordsList.array);
+    leoProfanity.add(["fdp", "ptn", "ntm", "clc"]);
+    leoProfanity.remove("sale");
 		if (leoProfanity.check(message.content)) {
 			message.delete();
 			message.channel.send({ content: "Pas de gros mots ! C'est un serveur musulman ici !" });

@@ -10,7 +10,9 @@ module.exports = (client) => {
 		const filePath = path.join(events_path, file);
 		const event = require(filePath);
 
-		if (event.once)
+    if (event.player)
+        client.player.events.on(event.name, (...args) => event.run(client, ...args));
+		else if (event.once)
 			client.once(event.name, (...args) => event.run(client, ...args));
 		else
 			client.on(event.name, (...args) => event.run(client, ...args));

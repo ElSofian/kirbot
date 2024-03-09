@@ -135,12 +135,12 @@ module.exports = {
 			case "emojis": {		
 				switch (subcommand) {
 					case "error": {
-						const emoji = interaction.options.getString("error");
+						const emoji = interaction.options.getString("emoji");
 						await client.db.set("emojis.error", emoji);
 						return successEmbed(`L'emoji ${emoji} a été configuré comme emoji d'erreur.`);
 					}
 					case "success": {
-						const emoji = interaction.options.getString("success");
+						const emoji = interaction.options.getString("emoji");
 						await client.db.set("emojis.success", emoji);
 						return successEmbed(`L'emoji ${emoji} a été configuré comme emoji de succès.`);
 					}
