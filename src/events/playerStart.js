@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
+const { QueueRepeatMode } = require("discord-player");
 
 module.exports = {
   name: "playerStart",
@@ -7,8 +8,14 @@ module.exports = {
 
     const interaction = queue.metadata;
     
+    client.player.startTime = Date.now();
+    client.player.currentTrack = track;
+
+    if (queue.isEmpty() || queue.repeatMode == QueueRepeatMode.TRACK) return;
+    
     const embed = new EmbedBuilder()
     .setColor("Green")
+    .setThumbnail(track.thumbnail)
     .setAuthor({ name: `Demandé par ${interaction.user.username}`, iconURL: interaction.user.displayAvatarURL() })
     .setDescription(`**${track.title}** est entrain d'etre recite.`)
     .addFields([
@@ -17,8 +24,6 @@ module.exports = {
       { name: "Lien", value: `[Clique ici](${track.url})` }
     ])
 
-    client.player.startTime = Date.now();
-    client.player.currentTrack = track;
     await interaction.channel.send({ embeds: [embed] });
   }
 }

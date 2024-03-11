@@ -1,4 +1,5 @@
 const { AttachmentBuilder } = require('discord.js');
+const avatarCommand = require("../commands/avatar.js");
 const { ndown, tikdown, twitterdown, ytdown } = require("nayan-media-downloader");
 const leoProfanity = require('leo-profanity');
 const frenchBadwordsList = require('french-badwords-list');
@@ -9,22 +10,27 @@ module.exports = {
 
 		if (message.author.bot) return;
 		if (!message.guild) return;
-		
+      
 		// Halal system
 		
 		if (message.content.startsWith("..say")) { message.delete(); return message.channel.send({ content: message.content.slice(5) }); }
 		leoProfanity.clearList();
 		leoProfanity.add(frenchBadwordsList.array);
     leoProfanity.add(["fdp", "ptn", "ntm", "clc"]);
-    leoProfanity.remove("sale");
+    leoProfanity.remove(["sale", "miserable"]);
 		if (leoProfanity.check(message.content)) {
 			message.delete();
 			message.channel.send({ content: "Pas de gros mots ! C'est un serveur musulman ici !" });
 		}
 
+    // Avatar command without "/"
+
+    if (message.content.startsWith("kirb pp") || message.content.startsWith("pp"))
+      return avatarCommand.run(client, message);
+      
 		// Link to video system
 
-        let url = '';
+    let url = '';
 		const match = message.content.match(/\bhttps?:\/\/\S+/);
 		
 		if (match)

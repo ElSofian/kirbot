@@ -1,4 +1,4 @@
-const { ApplicationCommandOptionType } = require('discord.js');
+const { ApplicationCommandOptionType, InteractionType } = require('discord.js');
 
 module.exports = {
 	name: 'avatar',
@@ -6,14 +6,22 @@ module.exports = {
 	options: [{
 		name: 'membre',
 		description: "Le membre dont vous voulez voir l'avatar.",
-		type: ApplicationCommandOptionType.User
+		type: ApplicationCommandOptionType.User,
+    required: false
 	}],
-	run: async(client, interaction, { errorEmbed }) => {
-		const member = interaction.options.getMember('membre') || interaction.member;
-		if (!member)
-			return errorEmbed("Je n'ai pas trouvé le membre.");
+	run: async(client, interaction) => {
+		if (interaction?.type == InteractionType.ApplicationCommand)
+    {
+  		const member = interaction.options.getMember('membre') || interaction.member;
+  
+  		const url = `${member.user.displayAvatarURL({ dynamic: true, size: 1024 })}&ignore=true`;
+      interaction.reply({ content: `Voici l'[avatar](${url}) de **${member.toString()}**.` });
+    } else {
+      const message = interaction;
+      const member = message.mentions.members.first() || message.member;
 
-		const url = `${member.user.displayAvatarURL({ dynamic: true, size: 1024 })}&ignore=true`;
-		interaction.reply({ content: `Voici l'[avatar](${url}) de **${member.toString()}**.` });
-	}
+      const url = `${member.user.displayAvatarURL({ dynamic: true, size: 1024 })}&ignore=true`;
+      message.channel.send({ content: `Voici l'[avatar](${url}) de **${member.toString()}**.` });
+    }
+  }
 }

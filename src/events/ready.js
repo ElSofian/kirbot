@@ -9,9 +9,9 @@ module.exports = {
 		client.logger.info("Ready!");
 
 		client.user.setPresence({
-			activities: [{ name: `Ready or Not`, type: ActivityType.Playing }],
+			activities: [{ name: `Among Us Avec Bilal`, type: ActivityType.Playing }],
 		});
-		
+
 		// Prayer alert system
 		
 		// Définir un ensemble pour stocker les heures de prière déjà vérifiées
@@ -53,11 +53,15 @@ module.exports = {
 							checkedPrayers.add(prayerIdentifier);
 							const timeLeft = moment.duration(prayerTime.diff(currentTime));
 							const channel = client.channels.cache.get(channelId);
-							client.logger.info(`C'est l'heure de la priere de ${prayer} a ${client.functions.cfl(city)}: ${timeLeft.humanize()}`);
+							// client.logger.info(`C'est l'heure de la priere de ${prayer} a ${client.functions.cfl(city)}: ${timeLeft.humanize()}`);
 							setTimeout(async() => {
 								const members = await client.db.get(`prayer_alerts.${city.toLowerCase()}`);
-								if (members && channel)
-									channel.send({ content: `${members.map(m => `<@${m}>`).join(" ")}, il est temps de prier ${prayer} à ${client.functions.cfl(city)} !` });
+								if (channel)
+								{
+									const inVocalMembers = members.filter(m => channel.guild.members.cache.get(m).voice.channel);
+									if (inVocalMembers.length > 0)
+                    channel.send({ content: `${inVocalMembers.map(m => `<@${m}>`).join(" ")}, il est temps de prier ${prayer} à ${client.functions.cfl(city)} !` });
+								}
 							}, timeLeft.asMilliseconds());
 						}
 					}

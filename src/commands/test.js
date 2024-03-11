@@ -5,6 +5,6 @@ module.exports = {
 	description: 'Commande pour effectuer des tests',
 	admin: true,
 	run: async(client, interaction, { errorEmbed }) => {
-		
+		interaction.reply({ content: "OK!" });
 	}
 }

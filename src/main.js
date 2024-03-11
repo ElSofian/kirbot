@@ -28,6 +28,9 @@ client.player = new Player(client, {
   }
 });
 client.player.extractors.loadDefault();
+client.player.startTime = null;
+client.player.currentTrack = null;
+client.player.muted = false;
 
 const commands = loadCommands(client);
 loadEvents(client);

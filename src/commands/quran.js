@@ -1,28 +1,5 @@
-const { EmbedBuilder, ApplicationCommandOptionType, ActionRowBuilder, ButtonBuilder, ButtonStyle, ApplicationCommand, time } = require('discord.js');
-
-const timeUntilTrackPlay = (client, track) => {
-  const elapsedSeconds = Math.floor((Date.now() - client.player.startTime) / 1000);
-  const trackQueue = track?.queue?.tracks?.data;
-  let totalTimeUntilPlay = 0, minutesUntilPlay = 0, secondsUntilPlay = 0;
-
-  if (trackQueue)
-  {
-    for (let i = 0; i < trackQueue.length; i++)
-    {
-      if (trackQueue[i].id == track.id) continue;
-      const trackDuration = trackQueue[i].duration;
-      const durationSplit = trackDuration.split(':');
-      const trackMinutes = parseInt(durationSplit[0]);
-      const trackSeconds = parseInt(durationSplit[1]);
-      totalTimeUntilPlay += (trackMinutes * 60000 + trackSeconds * 1000);
-    }
-    totalTimeUntilPlay += (client.player.currentTrack.__metadata.source.duration - elapsedSeconds);
-  }
-
-  minutesUntilPlay = Math.floor(totalTimeUntilPlay / 60000); // Conversion des millisecondes en minutes
-  secondsUntilPlay = Math.floor((totalTimeUntilPlay % 60000) / 1000); // Conversion des millisecondes restantes en secondes
-  return `${minutesUntilPlay} minutes et ${secondsUntilPlay} secondes`;
-}
+const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js');
+const { useQueue } = require('discord-player');
 
 module.exports = {
 	name: 'quran',
@@ -43,7 +20,7 @@ module.exports = {
       autocomplete: true
     }
   ],
-	run: async(client, interaction, { errorEmbed }) => {
+	run: async(client, interaction, { errorEmbed, successEmbed }) => {
     let surah = "sourate" + interaction.options.getString('sourate');
     const reciter = interaction.options.getString('recitateur');
     if (reciter) surah += ` ${reciter}`;
@@ -63,19 +40,19 @@ module.exports = {
           metadata: interaction,
           volume: 70,
           selfDeaf: true,
-          leaveOnStop: true,
           leaveOnEmpty: true,
           leaveOnEnd: true,
-          
         }
       });
 
+      const queue = useQueue(interaction.guildId);
+      if (!queue.isEmpty())
+        return successEmbed(`**${track.title}** ajouté à la file d'attente!`, false, false, "editReply");
       const embed = new EmbedBuilder()
         .setColor("Green")
         .setAuthor({ name: `Demandé par ${interaction.user.username}`, iconURL: interaction.user.displayAvatarURL() })
-        .setDescription(`**${track.title}** ajouté à la file d'attente.`)
+        .setDescription(`**${track.title}** est entrain d'etre recitee.`)
         .addFields([
-          // { name: "Lecture dans", value: timeUntilTrackPlay(client, track) },
           { name: "Recitateur", value: `${track.author}` },
           { name: "Durée", value: `${track.duration}` },
           { name: "Lien", value: `[Clique ici](${track.url})` }

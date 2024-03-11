@@ -131,5 +131,6 @@ module.exports = {
       { name: "Abdur Rashid Sufi" },
       { name: "Adel Al Kalbani" },
       { name: "Salah Albudair" },
+      { name: "Anas El Emadi" }
     ]
 }

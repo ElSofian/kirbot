@@ -1,0 +1,20 @@
+{
+  "files": {
+    "src/events/playerStart.js": [
+      {
+        "id": "64441ee4-8d87-4061-ae82-4cebc1b8a482",
+        "line": 1,
+        "version": 558,
+        "index": 47
+      }
+    ],
+    "src/handlers/loadEvents.js": [
+      {
+        "id": "ea44c873-c40c-482c-8ba9-5ff22dc6b78f",
+        "line": 2,
+        "version": 116,
+        "index": 64
+      }
+    ]
+  }
+}

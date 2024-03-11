@@ -2,9 +2,14 @@ const { Events, EmbedBuilder } = require('discord.js');
 
 module.exports = {
 	name: Events.VoiceStateUpdate,
-	run: (client, oldState, newState) => {
+	run: async (client, oldState, newState) => {
 		if (oldState.member.user.bot) return;
 
+    const remindersMembers = await client.db.get("reminders");
+    if (!remindersMembers)
+        await client.db.set("reminders", []);
+    if (!remindersMembers.includes(oldState.member.id)) return;
+    
 		if (newState.channelId === null || typeof newState.channelId == 'undefined')
 		{
 			const channelId = "1214646275358855301";
