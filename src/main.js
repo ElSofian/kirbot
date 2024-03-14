@@ -5,6 +5,7 @@ const loadCommands = require('./handlers/loadCommands');
 const loadEvents = require ('./handlers/loadEvents');
 const registerCommands = require('./handlers/registerCommands');
 const { QuickDB } = require("quick.db");
+const OpenAI = require("openai");
 
 const client = new Client({ 
    intents: [
@@ -20,6 +21,9 @@ client.functions = require('./structures/Functions');
 client.data = require("./structures/Data.js");
 client.config = require('../config.js');
 client.db = new QuickDB();
+client.ai = new OpenAI({
+	apiKey: client.config.OPENAI_API_KEY
+})
 client.player = new Player(client, {
   ytdlOptions: {
     filter: "audioonly",

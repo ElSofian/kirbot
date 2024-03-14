@@ -9,7 +9,7 @@ module.exports = {
 		client.logger.info("Ready!");
 
 		client.user.setPresence({
-			activities: [{ name: `Among Us Avec Bilal`, type: ActivityType.Playing }],
+			activities: [{ name: `Among Us Avec Bilel`, type: ActivityType.Playing }],
 		});
 
 		// Prayer alert system
@@ -27,10 +27,10 @@ module.exports = {
 
 			// Ajouter un décalage horaire à l'heure actuelle
 			const offsetHours = 1; // Modifier en fonction de votre décalage horaire
-			const currentTime = moment().add(offsetHours, 'hours');
-			// const currentTime = moment()   // <- QUAND ON CODE EN LOCAL ET NON SUR L'HEBERGEUR
+			// const currentTime = moment().add(offsetHours, 'hours');
+			const currentTime = moment()   // <- QUAND ON CODE EN LOCAL ET NON SUR L'HEBERGEUR
 
-			const channelId = "1214899328607592469";
+			const channelId = "1214646275358855301";
 			for (const city in cities) {
 				const response = await axios.get(`http://api.aladhan.com/v1/calendarByCity/${year}/${month}`, {
 					params: {
@@ -53,12 +53,12 @@ module.exports = {
 							checkedPrayers.add(prayerIdentifier);
 							const timeLeft = moment.duration(prayerTime.diff(currentTime));
 							const channel = client.channels.cache.get(channelId);
-							// client.logger.info(`C'est l'heure de la priere de ${prayer} a ${client.functions.cfl(city)}: ${timeLeft.humanize()}`);
+							client.logger.info(`C'est l'heure de la priere de ${prayer} a ${client.functions.cfl(city)} dans: ${timeLeft.humanize()}  (${prayerTime.format("HH:mm")})`);
 							setTimeout(async() => {
 								const members = await client.db.get(`prayer_alerts.${city.toLowerCase()}`);
 								if (channel)
 								{
-									const inVocalMembers = members.filter(m => channel.guild.members.cache.get(m).voice.channel);
+									const inVocalMembers = members.filter(m => m && channel?.guild?.members?.cache?.get(m)?.voice?.channel);
 									if (inVocalMembers.length > 0)
                     channel.send({ content: `${inVocalMembers.map(m => `<@${m}>`).join(" ")}, il est temps de prier ${prayer} à ${client.functions.cfl(city)} !` });
 								}
